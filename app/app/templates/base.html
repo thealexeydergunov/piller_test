@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+        <title>{{title}}</title>
+    {% endblock %}
+  </head>
+  <body>
+    <h1>{{title}}</h1>
+    <div>
+      {% for error in errors %}
+          <p style="color: red">{{ error }}</p>
+      {% endfor %}
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>

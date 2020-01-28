@@ -1,0 +1,8 @@
+postgres:
+  database: app_db
+  user: app_user
+  password: app_secreet_password
+  host: db
+  port: 5432
+  minsize: 1
+  maxsize: 5

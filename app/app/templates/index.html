@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% set title = "Welcome APP" %}
+
+{% block content %}
+{% if not user_data %}
+    <p><a href="/sign_in/">Please login to APP.</a></p>
+    <p><a href="/sign_up/">Or sign up now!</a></p>
+{% else %}
+    {% if user_data.admin %}
+        <p>admin</p>
+    {% else %}
+        <p>user</p>
+    {% endif %}
+{% endif %}
+{% endblock %}
