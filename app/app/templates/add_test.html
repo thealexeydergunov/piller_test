@@ -1,16 +1,18 @@
 <{% extends "base.html" %}
 
-{% set title = "Sign in APP" %}
+{% set title = "Add test APP" %}
 
 {% block content %}
-<form action="/sign_in/" method="post" accept-charset="utf-8"
-      enctype="application/x-www-form-urlencoded">
+{% if status %}
+    <h2>{{ status }}</h2>
+{% else %}
+    <form action="/add_test/" method="post" accept-charset="utf-8"
+          enctype="application/x-www-form-urlencoded">
 
-    <label for="email">Email</label>
-    <input id="email" name="email" type="email" value="" autofocus/>
-    <label for="password">Password</label>
-    <input id="password" name="password" type="password" value=""/>
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required="required" value="" autofocus/>
 
-    <input type="submit" value="login"/>
-</form>
+        <input type="submit" value="add test"/>
+    </form>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,23 @@
+<{% extends "base.html" %}
+
+{% set title = "Add question APP" %}
+
+{% block content %}
+{% if status %}
+    <h2>{{ status }}</h2>
+{% else %}
+    <form action="/add_question/" method="post" accept-charset="utf-8"
+          enctype="application/x-www-form-urlencoded">
+
+        <label for="question_text">Question text</label>
+        <input id="question_text" name="question_text" type="text" required="required" value="" autofocus/>
+        <select name="test_id">
+            {% for test in tests %}
+                <option value="{{ test.id }}">{{ test.name }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" value="add question"/>
+    </form>
+{% endif %}
+{% endblock %}

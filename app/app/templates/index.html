@@ -9,9 +9,9 @@
 {% else %}
     <p><a href="/test/">Show tests list.</a></p>
     {% if user_data.admin %}
-        <p>admin</p>
-    {% else %}
-        <p>user</p>
+        <p><a href="/add_test/">Add test to APP.</a></p>
+        <p><a href="/add_question/">Add question to APP.</a></p>
+        <p><a href="/add_answer/">Add answer to APP.</a></p>
     {% endif %}
 {% endif %}
 {% endblock %}

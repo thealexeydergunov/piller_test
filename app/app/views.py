@@ -5,7 +5,8 @@ import aiohttp_jinja2
 from aiohttp_session import (get_session, new_session)
 
 from db import (create_user, login_user_by_email, get_test_list,
-                get_test_detail, check_test_result)
+                get_test_detail, check_test_result, create_test,
+                create_question, get_question_list, create_answer)
 
 
 @aiohttp_jinja2.template('index.html')
@@ -108,5 +109,111 @@ async def test_detail(request):
             count = await check_test_result(conn=conn,
                                             choices_ids=data.values())
         out = {'test_result': str(round(count['count']/len(data)*100, 2))}
+
+    return out
+
+
+@aiohttp_jinja2.template('add_test.html')
+async def add_test(request):
+    session = await get_session(request)
+    if not session.get('user_data'):
+        raise web.HTTPFound('/')
+
+    if request.method == 'POST':
+        data = await request.post()
+        name = data.get('name')
+
+        errors = []
+        if not name:
+            errors.append('incorrect name')
+        if errors:
+            out = {'errors': errors}
+        else:
+            async with request.app['db'].acquire() as conn:
+                await create_test(conn=conn, name=name)
+            out = {'status': 'Success!'}
+    else:
+        out = {}
+
+    return out
+
+
+@aiohttp_jinja2.template('add_question.html')
+async def add_question(request):
+    async def get_data():
+        async with request.app['db'].acquire() as conn:
+            data = await get_test_list(conn=conn)
+        return data
+
+    session = await get_session(request)
+    if not session.get('user_data'):
+        raise web.HTTPFound('/')
+
+    if request.method == 'POST':
+        data = await request.post()
+        question_text = data.get('question_text')
+        test_id = data.get('test_id', '')
+
+        errors = []
+        if not question_text:
+            errors.append('incorrect question text')
+        if not test_id.isdigit():
+            errors.append('incorrect test id')
+
+        if not errors:
+            async with request.app['db'].acquire() as conn:
+                await create_question(conn=conn,
+                                      question_text=question_text,
+                                      test_id=test_id)
+            out = {'status': 'Success!'}
+        else:
+            tests = await get_data()
+            out = {'errors': errors,
+                   'tests': tests}
+    else:
+        tests = await get_data()
+        out = {'tests': tests}
+
+    return out
+
+
+@aiohttp_jinja2.template('add_answer.html')
+async def add_answer(request):
+    async def get_data():
+        async with request.app['db'].acquire() as conn:
+            data = await get_question_list(conn=conn)
+        return data
+
+    session = await get_session(request)
+    if not session.get('user_data'):
+        raise web.HTTPFound('/')
+
+    if request.method == 'POST':
+        data = await request.post()
+        name = data.get('name')
+        truth = bool(data.get('truth'))
+        question_id = data.get('question_id', '')
+
+        errors = []
+        if not name:
+            errors.append('incorrect name')
+        if not question_id.isdigit():
+            errors.append('incorrect question id')
+
+        if not errors:
+            async with request.app['db'].acquire() as conn:
+                await create_answer(conn=conn,
+                                    name=name,
+                                    truth=truth,
+                                    question_id=question_id)
+            out = {'status': 'Success!'}
+        else:
+            questions = await get_data()
+            out = {'errors': errors,
+                   'questions': questions}
+    else:
+        questions = await get_data()
+
+        out = {'questions': questions}
 
     return out

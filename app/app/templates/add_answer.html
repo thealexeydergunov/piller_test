@@ -1,0 +1,26 @@
+<{% extends "base.html" %}
+
+{% set title = "Add answer APP" %}
+
+{% block content %}
+{% if status %}
+    <h2>{{ status }}</h2>
+{% else %}
+    <form action="/add_answer/" method="post" accept-charset="utf-8"
+          enctype="application/x-www-form-urlencoded">
+
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required="required" value="" autofocus/>
+        <label for="truth">Truth</label>
+        <input id="truth" name="truth" type="checkbox" value="+"/>
+
+        <select name="question_id">
+            {% for question in questions %}
+                <option value="{{ question.id }}">{{ question.question_text }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" value="add answer"/>
+    </form>
+{% endif %}
+{% endblock %}

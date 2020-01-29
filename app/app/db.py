@@ -109,7 +109,7 @@ async def login_user_by_email(conn, email: str, password: str) -> dict:
 
 async def get_test_list(conn) -> list:
     res = await conn.execute(
-        f"SELECT id, name FROM public.test;")
+        f"SELECT id, name FROM public.test ORDER BY name;")
 
     tests = await res.fetchall()
     out = []
@@ -183,3 +183,30 @@ async def check_test_result(conn, choices_ids: list) -> dict:
     out = {'count': count[0]}
 
     return out
+
+
+async def create_test(conn, name: str) -> None:
+    await conn.execute(f"INSERT INTO public.test (name) VALUES ('{name}');")
+
+
+async def create_question(conn, question_text: str, test_id: int) -> None:
+    await conn.execute(f"INSERT INTO public.question (question_text, test_id) "
+                       f"VALUES ('{question_text}', {test_id});")
+
+
+async def get_question_list(conn) -> list:
+    res = await conn.execute(
+        f"SELECT id, question_text FROM public.question ORDER BY test_id;")
+
+    questions = await res.fetchall()
+    out = []
+    for question in questions:
+        out.append({'id': question[0], 'question_text': question[1]})
+
+    return out
+
+
+async def create_answer(conn, name: str, truth: bool, question_id: int) -> None:
+    await conn.execute(
+        f"INSERT INTO public.answer (name, truth, question_id) VALUES "
+        f"('{name}', {'TRUE' if truth else  'FALSE'}, {question_id});")
