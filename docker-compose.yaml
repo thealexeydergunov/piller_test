@@ -4,6 +4,8 @@ services:
   app:
     build: app/
     restart: always
+    entrypoint:
+      - /usr/src/app/entrypoint-app.sh
     command: ["python3", "app/main.py"]
     expose:
       - 8080
@@ -13,6 +15,9 @@ services:
       - db
     volumes:
       - ./app/:/usr/src/app/
+    environment:
+      SQL_HOST: db
+      SQL_PORT: 5432
     networks:
       - net_inner
 
