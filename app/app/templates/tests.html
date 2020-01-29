@@ -1,0 +1,11 @@
+<{% extends "base.html" %}
+
+{% set title = "Tests APP" %}
+
+{% block content %}
+<ol>
+{% for test in tests %}
+  <li><a href="/test/{{ test.id }}">{{ test.name }}</a></li>
+{% endfor %}
+</ol>
+{% endblock %}

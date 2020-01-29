@@ -1,0 +1,24 @@
+<{% extends "base.html" %}
+
+{% set title = "Complete test APP" %}
+
+{% block content %}
+{{ test_name }}
+{% if questions %}
+    <form action="/test/{{ id }}" method="post" accept-charset="utf-8"
+              enctype="application/x-www-form-urlencoded">
+    {% for question in questions %}
+        <h5>{{ question.question_text }}</h5>
+            <p>
+                {% for choice in question.choices %}
+                    <input type="radio" name="{{ question.id }}" required="required" value="{{ choice.id }}">{{ choice.name }}<Br>
+                {% endfor %}
+            </p>
+    {% endfor %}
+    <input type="submit" value="check it"/>
+    </form>
+{% endif %}
+{% if test_result %}
+    <h2>Your result is {{ test_result }}%</h2>
+{% endif %}
+{% endblock %}
