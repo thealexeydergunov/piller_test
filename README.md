@@ -11,7 +11,7 @@ User and admin user can pass tests.
 Admin user can add test, questions and answers.
 ## Login like admin
 **email**: `alex@gmail.com`  
-**password**: `123456'  
+**password**: `123456`  
 ## Moments need to be finalized
 1) **Session must be saved to Redis.** Now we have statefull service because we save session to Cookie Storage. But we need stateless service.
 2) **App must work with semaphore.** If we have many requests, our app can use all RAM and exit.
